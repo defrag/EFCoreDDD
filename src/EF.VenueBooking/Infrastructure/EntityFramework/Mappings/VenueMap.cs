@@ -12,7 +12,9 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework.Mappings
         public void Configure(EntityTypeBuilder<Venue> builder)
         {
             builder.HasKey(_ => _.VenueId);
-            builder.OwnsOne(_ => _.Location);
+
+            builder.OwnsOne(_ => _.Location).Property(l => l.City).HasColumnName("City").IsRequired();
+            builder.OwnsOne(_ => _.Location).Property(l => l.Address).HasColumnName("Address").IsRequired();
         }
     }
 }

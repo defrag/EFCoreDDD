@@ -6,9 +6,9 @@ namespace EF.VenueBooking.Domain
 {
     public sealed class Location
     {
-        private string _city;
+        public string City { get; private set; }
 
-        private string _address;
+        public string Address { get; private set; }
 
         private Location()
         {
@@ -17,13 +17,13 @@ namespace EF.VenueBooking.Domain
 
         public Location(string city, string address)
         {
-            _city = city ?? throw new ArgumentNullException(nameof(city));
-            _address = address ?? throw new ArgumentNullException(nameof(address));
+            City = city ?? throw new ArgumentNullException(nameof(city));
+            Address = address ?? throw new ArgumentNullException(nameof(address));
         }
 
         public override string ToString()
         {
-            return _address + ", " + _city;
+            return Address + ", " + City;
         }
     }
 }
