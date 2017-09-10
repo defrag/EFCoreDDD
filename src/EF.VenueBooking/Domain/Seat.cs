@@ -21,7 +21,7 @@ namespace EF.VenueBooking.Domain
         {
             if (IsReserved)
             {
-                throw new Exception("Seat already reserved");
+                throw new SeatPreviouslyReserved($"Seat was already reserved for {Attendee}.");
             }
             Attendee = attendee;
         }

@@ -24,4 +24,12 @@ namespace EF.VenueBooking.Domain
         {
         }
     }
+
+    public class SeatPreviouslyReserved : VenueBookingException
+    {
+
+        public SeatPreviouslyReserved(string message) : base(message)
+        {
+        }
+    }
 }

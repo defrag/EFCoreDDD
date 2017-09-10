@@ -54,9 +54,6 @@ namespace EF.VenueBooking.Domain
 
         private List<Seat> ReservedSeats => Seats.Where(_ => _.IsReserved).ToList();
 
-
-        private bool FreeSeatsAvailable => FreeSeats.Count > 0;
-
-
+        private bool FreeSeatsAvailable => FreeSeats.Count > 0;        
     }
 }
