@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EF.VenueBooking.Database\EF.VenueBooking.Database.csproj" />
     <ProjectReference Include="..\EF.VenueBooking\EF.VenueBooking.csproj" />
   </ItemGroup>
 

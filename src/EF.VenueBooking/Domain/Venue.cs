@@ -18,7 +18,6 @@ namespace EF.VenueBooking.Domain
 
         private List<(string, DiscountCoupon)> DispatchedCoupons { get; set; }
 
-
         private Venue()
         {
 
@@ -98,6 +97,5 @@ namespace EF.VenueBooking.Domain
             get { return JsonConvert.SerializeObject(DispatchedCoupons); }
             private set { DispatchedCoupons = JsonConvert.DeserializeObject<List<(string, DiscountCoupon)>>(value); }
         }
-
     }
 }

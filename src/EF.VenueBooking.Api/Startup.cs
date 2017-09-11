@@ -49,7 +49,7 @@ namespace EF.VenueBooking.Api
 
         private Action<DbContextOptionsBuilder> GetDbOptions()
         {
-            return options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("EF.VenueBooking.Api"));
+            return options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("EF.VenueBooking.Database"));
             //return options => options.UseInMemoryDatabase($"InMemVenuesDb");
         }
 

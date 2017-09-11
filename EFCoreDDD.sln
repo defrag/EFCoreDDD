@@ -7,11 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{474B7A33-BEA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E07C92D6-F2AC-4CE3-975A-B642CCFA56E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.Api", "src\EF.VenueBooking.Api\EF.VenueBooking.Api.csproj", "{9CF9E164-E0D7-4693-8961-F8ADCBCB6E62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking.Api", "src\EF.VenueBooking.Api\EF.VenueBooking.Api.csproj", "{9CF9E164-E0D7-4693-8961-F8ADCBCB6E62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking", "src\EF.VenueBooking\EF.VenueBooking.csproj", "{11EA5408-56BD-4F8D-92D4-BE119DC6EB72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking", "src\EF.VenueBooking\EF.VenueBooking.csproj", "{11EA5408-56BD-4F8D-92D4-BE119DC6EB72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.Tests", "test\EF.VenueBooking.Tests\EF.VenueBooking.Tests.csproj", "{B186E854-A662-40F9-9963-13D6601478A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking.Tests", "test\EF.VenueBooking.Tests\EF.VenueBooking.Tests.csproj", "{B186E854-A662-40F9-9963-13D6601478A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.IntegrationTests", "test\EF.VenueBooking.IntegrationTests\EF.VenueBooking.IntegrationTests.csproj", "{857857CD-80CC-4F4E-9C4B-6214795982D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.Database", "src\EF.VenueBooking.Database\EF.VenueBooking.Database.csproj", "{4D488FF0-1AC9-4EFC-96A0-A0659538729A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +35,14 @@ Global
 		{B186E854-A662-40F9-9963-13D6601478A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B186E854-A662-40F9-9963-13D6601478A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B186E854-A662-40F9-9963-13D6601478A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{857857CD-80CC-4F4E-9C4B-6214795982D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{857857CD-80CC-4F4E-9C4B-6214795982D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{857857CD-80CC-4F4E-9C4B-6214795982D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{857857CD-80CC-4F4E-9C4B-6214795982D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -39,6 +51,8 @@ Global
 		{9CF9E164-E0D7-4693-8961-F8ADCBCB6E62} = {474B7A33-BEA3-4930-82B4-F5A724039AA4}
 		{11EA5408-56BD-4F8D-92D4-BE119DC6EB72} = {474B7A33-BEA3-4930-82B4-F5A724039AA4}
 		{B186E854-A662-40F9-9963-13D6601478A4} = {E07C92D6-F2AC-4CE3-975A-B642CCFA56E3}
+		{857857CD-80CC-4F4E-9C4B-6214795982D5} = {E07C92D6-F2AC-4CE3-975A-B642CCFA56E3}
+		{4D488FF0-1AC9-4EFC-96A0-A0659538729A} = {474B7A33-BEA3-4930-82B4-F5A724039AA4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25344C46-3083-47CF-9849-2D89D37CF0B4}
