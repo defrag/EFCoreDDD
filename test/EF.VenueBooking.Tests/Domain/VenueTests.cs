@@ -37,5 +37,32 @@ namespace EF.VenueBooking.Tests.Domain
                 .WithMessage("No more seats available for this venue.");
         }
 
+        [Fact]
+        public void it_registers_coupons_for_first_attendees_if_coupons_are_provided()
+        {
+            var venue = Venue.WithNumberOfSeatsAndCoupons(
+                Guid.NewGuid(), 
+                new Location("Cracov", "Florianska 1"), 
+                10,
+                new List<DiscountCoupon>() { new DiscountCoupon("CODE1", "Visual Studio Enterprice") }
+            );
+            venue.ReserveFor("neo");
+            venue.HasCouponFor("neo").Should().BeTrue();
+        }
+
+        [Fact]
+        public void it_doesnt_dispatch_any_more_coupons_if_all_were_dispatched()
+        {
+            var venue = Venue.WithNumberOfSeatsAndCoupons(
+                Guid.NewGuid(),
+                new Location("Cracov", "Florianska 1"),
+                10,
+                new List<DiscountCoupon>() { new DiscountCoupon("CODE1", "Visual Studio Enterprice") }
+            );
+            venue.ReserveFor("neo");
+            venue.ReserveFor("michi");
+            venue.HasCouponFor("michi").Should().BeFalse();
+        }
+
     }
 }

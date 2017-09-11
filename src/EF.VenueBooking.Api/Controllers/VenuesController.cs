@@ -24,14 +24,18 @@ namespace EF.VenueBooking.Api.Controllers
         public async Task<IEnumerable<string>> Get()
         {
             var id = Guid.NewGuid();
-            var v = Venue.WithNumberOfSeats(id, new Location("Cracov", "Florianska 1"), 10);
+            var v = Venue.WithNumberOfSeatsAndCoupons(
+                id, 
+                new Location("Cracov", "Florianska 1"), 
+                10,
+                new List<DiscountCoupon>() { new DiscountCoupon("CODE0001", "IntelliJ"), new DiscountCoupon("CODE0002", "IntelliJ") }
+            );
 
             v.ReserveFor("foobar");
             await _repo.Add(v);
 
             var added = await _repo.Get(id);
             v.ReserveFor("barbaz");
-
 
             return new string[] { "value1", "value2" };
         }
