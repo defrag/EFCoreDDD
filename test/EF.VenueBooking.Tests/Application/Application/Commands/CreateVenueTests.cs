@@ -1,12 +1,8 @@
 ﻿using EF.VenueBooking.Application.Commands;
 using EF.VenueBooking.Application.Queries;
-using EF.VenueBooking.Infrastructure.EntityFramework;
 using EF.VenueBooking.Tests.Testing;
 using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -30,8 +26,8 @@ namespace EF.VenueBooking.Tests.Application.Application.Commands
 
                 // dispatch command
                 await ct.Dispatch(command);
-
-                // assert query
+                
+                // assert query side
                 var queries = ct.GetService<VenueQueries>();
                 var res = await queries.Find(id);
                 res.Should().NotBeNull();

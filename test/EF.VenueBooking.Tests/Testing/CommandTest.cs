@@ -13,6 +13,7 @@ namespace EF.VenueBooking.Tests.Testing
     {
         private IServiceProvider _services;
         private TestStartup _startup;
+        private VenueBookingContext _context;
 
         public CommandTest()
         {
@@ -25,8 +26,8 @@ namespace EF.VenueBooking.Tests.Testing
 
             _services = services.BuildServiceProvider();
 
-            var context = GetService<VenueBookingContext>();
-            context.Database.EnsureCreated();
+            _context = GetService<VenueBookingContext>();
+            _context.Database.EnsureCreated();
         }
 
         public async Task Dispatch(IRequest command)
@@ -37,6 +38,8 @@ namespace EF.VenueBooking.Tests.Testing
 
         public T GetService<T>()
             => _services.GetService<T>();
+
+        public VenueBookingContext Context => _context;
 
         public void Dispose()
         {
