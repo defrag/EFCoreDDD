@@ -14,6 +14,7 @@ namespace EF.VenueBooking.Api.Tests.Testing
     {
         public TestServer Server { get; }
         public HttpClient Client { get; }
+        public State State { get; }
 
         private VenueBookingContext _context;
 
@@ -25,11 +26,15 @@ namespace EF.VenueBooking.Api.Tests.Testing
             var builder = new WebHostBuilder()
                 .UseContentRoot(contentRoot)
                 .UseEnvironment("Test")
-                
-                .UseStartup(typeof(TestStartup));
+                .UseStartup(typeof(TestStartup))
+                .ConfigureServices(services =>
+                {
+                     services.AddSingleton<State>();
+                });
 
             Server = new TestServer(builder);
             Client = Server.CreateClient();
+            State = GetService<State>();
             _context = GetService<VenueBookingContext>();
             _context.Database.EnsureCreated();
         }

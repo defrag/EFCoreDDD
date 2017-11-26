@@ -34,5 +34,31 @@ namespace EF.VenueBooking.Api.Tests.Controllers
                 response.StatusCode.Should().Be(HttpStatusCode.Created);
             }
         }
+
+        [Fact]
+        public async Task it_responds_with_404_if_venue_doesnt_exist()
+        {
+            using (var af = new ApiFixture())
+            {
+                var guid = Guid.NewGuid();
+                var response = await af.Client.GetAsync($"api/venues/{guid}");
+                response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+            }
+        }
+
+        [Fact]
+        public async Task it_responds_with_200_if_venue_exists()
+        {
+            using (var af = new ApiFixture())
+            {
+                var id = Guid.NewGuid();
+                await af.State.CreateVenue(id, "Warsaw", "St 1");
+                var response = await af.Client.GetAsync($"api/venues/{id}");
+                response.StatusCode.Should().Be(HttpStatusCode.OK);
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+                responseBody.Should().Be(@"{""venueId"":""{id}"",""city"":""Warsaw"",""address"":""St 1""}".Replace("{id}", id.ToString()));
+            }
+        }
     }
 }

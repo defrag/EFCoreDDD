@@ -34,9 +34,9 @@ namespace EF.VenueBooking.Api.Controllers
         }
 
         [HttpGet("{id}", Name = "GetVenue")]
-        public IActionResult GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
-            var item = _queries.Find(id);
+            var item = await _queries.Find(id);
             if (item == null)
             {
                 return NotFound();
