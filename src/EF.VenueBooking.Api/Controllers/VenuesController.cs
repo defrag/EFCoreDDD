@@ -17,14 +17,14 @@ namespace EF.VenueBooking.Api.Controllers
             _repo = repo ?? throw new ArgumentNullException(nameof(repo));
         }
 
-        // GET: api/values
+        // GET: api/venues
         [HttpGet]
         public async Task<IEnumerable<string>> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // POST api/values
+        // POST api/venues
         [HttpPost]
         public void Post([FromBody]string value)
         {
