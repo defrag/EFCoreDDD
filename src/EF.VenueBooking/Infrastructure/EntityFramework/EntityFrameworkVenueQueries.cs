@@ -6,6 +6,7 @@ using EF.VenueBooking.Application.ViewModels;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Dapper;
+using System.Linq;
 
 namespace EF.VenueBooking.Infrastructure.EntityFramework
 {

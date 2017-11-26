@@ -33,7 +33,7 @@ namespace EF.VenueBooking.Api
             app.UseMvc();
         }
 
-        private void ConfigureVenueBooking(IServiceCollection services)
+        protected virtual void ConfigureVenueBooking(IServiceCollection services)
         {
             var vb = new VenueBookingStartup();
             vb.ConfigureServices(services, Configuration);

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.12
+VisualStudioVersion = 15.0.27004.2008
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{474B7A33-BEA3-4930-82B4-F5A724039AA4}"
 EndProject
@@ -13,9 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking", "src\EF.V
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking.Tests", "test\EF.VenueBooking.Tests\EF.VenueBooking.Tests.csproj", "{B186E854-A662-40F9-9963-13D6601478A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.IntegrationTests", "test\EF.VenueBooking.IntegrationTests\EF.VenueBooking.IntegrationTests.csproj", "{857857CD-80CC-4F4E-9C4B-6214795982D5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking.IntegrationTests", "test\EF.VenueBooking.IntegrationTests\EF.VenueBooking.IntegrationTests.csproj", "{857857CD-80CC-4F4E-9C4B-6214795982D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.Database", "src\EF.VenueBooking.Database\EF.VenueBooking.Database.csproj", "{4D488FF0-1AC9-4EFC-96A0-A0659538729A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EF.VenueBooking.Database", "src\EF.VenueBooking.Database\EF.VenueBooking.Database.csproj", "{4D488FF0-1AC9-4EFC-96A0-A0659538729A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF.VenueBooking.Api.Tests", "test\EF.VenueBooking.Api.Tests\EF.VenueBooking.Api.Tests.csproj", "{9E90D9F4-740D-43E2-A9BC-853AFB002E08}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D488FF0-1AC9-4EFC-96A0-A0659538729A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E90D9F4-740D-43E2-A9BC-853AFB002E08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E90D9F4-740D-43E2-A9BC-853AFB002E08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E90D9F4-740D-43E2-A9BC-853AFB002E08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E90D9F4-740D-43E2-A9BC-853AFB002E08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -53,6 +59,7 @@ Global
 		{B186E854-A662-40F9-9963-13D6601478A4} = {E07C92D6-F2AC-4CE3-975A-B642CCFA56E3}
 		{857857CD-80CC-4F4E-9C4B-6214795982D5} = {E07C92D6-F2AC-4CE3-975A-B642CCFA56E3}
 		{4D488FF0-1AC9-4EFC-96A0-A0659538729A} = {474B7A33-BEA3-4930-82B4-F5A724039AA4}
+		{9E90D9F4-740D-43E2-A9BC-853AFB002E08} = {E07C92D6-F2AC-4CE3-975A-B642CCFA56E3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {25344C46-3083-47CF-9849-2D89D37CF0B4}
