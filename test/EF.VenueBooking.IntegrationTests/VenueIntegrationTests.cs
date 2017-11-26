@@ -47,7 +47,6 @@ namespace EF.VenueBooking.IntegrationTests
                     FROM [dbo].[Venues] 
                     WHERE [VenueId] = @id", new { id });
 
-
                 Assert.Equal("Cracov", result.First().City);
                 Assert.Equal("Florianska 1", result.First().Address);
                 Assert.Equal("[]", result.First().DispatchedCoupons);
