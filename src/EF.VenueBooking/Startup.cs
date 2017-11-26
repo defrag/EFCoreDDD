@@ -1,4 +1,5 @@
-﻿using EF.VenueBooking.Domain;
+﻿using EF.VenueBooking.Application.Queries;
+using EF.VenueBooking.Domain;
 using EF.VenueBooking.Infrastructure.EntityFramework;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace EF.VenueBooking
         {
             services.AddDbContext<VenueBookingContext>(GetDbOptions(configuration));
             services.AddTransient<VenueRepository, EntityFrameworkVenueRepository>();
+            services.AddTransient<VenueQueries, EntityFrameworkVenueQueries>();
 
             services.AddMediatR(GetType().GetTypeInfo().Assembly);
         }

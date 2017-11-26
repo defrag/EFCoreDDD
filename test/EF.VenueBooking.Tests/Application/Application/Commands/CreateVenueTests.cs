@@ -1,4 +1,5 @@
 ﻿using EF.VenueBooking.Application.Commands;
+using EF.VenueBooking.Application.Queries;
 using EF.VenueBooking.Infrastructure.EntityFramework;
 using EF.VenueBooking.Tests.Testing;
 using FluentAssertions;
@@ -23,8 +24,12 @@ namespace EF.VenueBooking.Tests.Application.Application.Commands
                 100, 
                 new[] { Tuple.Create("CODE1", "IntelliJ"), Tuple.Create("CODE2", "IntelliJ") }
             );
+            
+            // dispatch command
             await Dispatch(command);
 
+
+            // assert entry exists in context
             var context = GetService<VenueBookingContext>();
 
             var entry = context
