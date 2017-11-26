@@ -5,6 +5,7 @@ using System.Text;
 using EF.VenueBooking.Application.ViewModels;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Dapper;
 
 namespace EF.VenueBooking.Infrastructure.EntityFramework
 {
@@ -19,20 +20,19 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework
 
         public async Task<Venue> Find(Guid id)
         {
-            using (var command = _context.Database.GetDbConnection().CreateCommand())
+            using (var connection = _context.Database.GetDbConnection())
             {
-                command.CommandText = "SELECT VenueId, City, Address From Venue WHERE VenueId = " +id.ToString();
-                _context.Database.OpenConnection();
-                using (var result = command.ExecuteReader())
-                {
-                    var res = await result.ReadAsync();
-                    if (!res)
-                    {
-                        return null;
-                    }
+                var result = await connection.QueryFirstOrDefaultAsync<dynamic>(@"
+                    SELECT [VenueId], [Address], [City]
+                    FROM [Venues] 
+                    WHERE [VenueId] = @id", new { id });
 
-                    return new Venue(result.GetGuid(0), result.GetString(1), result.GetString(2));
+                if (null == result)
+                {
+                    return null;
                 }
+
+                return new Venue(new Guid(result.VenueId), result.City, result.Address);
             }
         }
     }
