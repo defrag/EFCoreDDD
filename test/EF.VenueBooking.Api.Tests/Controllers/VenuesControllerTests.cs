@@ -57,7 +57,7 @@ namespace EF.VenueBooking.Api.Tests.Controllers
                 response.StatusCode.Should().Be(HttpStatusCode.OK);
 
                 var responseBody = await response.Content.ReadAsStringAsync();
-                responseBody.Should().Be(@"{""venueId"":""{id}"",""city"":""Warsaw"",""address"":""St 1""}".Replace("{id}", id.ToString()));
+                responseBody.Should().MatchJson(@"{""venueId"":""@guid@"",""city"":""Warsaw"",""address"":""St 1""}");
             }
         }
     }
