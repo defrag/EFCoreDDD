@@ -21,7 +21,7 @@ namespace EF.VenueBooking.Tests.Application.Application.Commands
                     "Cracov",
                     "Florianska 10",
                     100,
-                    new[] { Tuple.Create("CODE1", "IntelliJ"), Tuple.Create("CODE2", "IntelliJ") }
+                    new[] { ("CODE1", "IntelliJ"),("CODE2", "IntelliJ") }
                 );
 
                 // dispatch command
@@ -30,10 +30,14 @@ namespace EF.VenueBooking.Tests.Application.Application.Commands
                 // assert query side
                 var queries = ct.GetService<VenueQueries>();
                 var res = await queries.Find(id);
-                res.Should().NotBeNull();
-                res.VenueId.Should().Be(id);
-                res.City.Should().Be("Cracov");
-                res.Address.Should().Be("Florianska 10");
+                res.Match(Some: _ =>
+                {
+                    _.Should().NotBeNull();
+                    _.VenueId.Should().Be(id);
+                    _.City.Should().Be("Cracov");
+                    _.Address.Should().Be("Florianska 10");
+                }, None: () => true.Should().BeFalse());
+                
             }
         }
     }

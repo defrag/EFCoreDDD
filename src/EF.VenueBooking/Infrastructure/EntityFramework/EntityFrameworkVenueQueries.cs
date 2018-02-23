@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Dapper;
 using System.Linq;
+using static LanguageExt.Prelude;
+using LanguageExt;
 
 namespace EF.VenueBooking.Infrastructure.EntityFramework
 {
@@ -19,7 +21,7 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework
             _context = context;
         }
 
-        public async Task<Venue> Find(Guid id)
+        public async Task<Option<VenueViewModel>> Find(Guid id)
         {
             using (var connection = _context.Database.GetDbConnection())
             {
@@ -30,10 +32,10 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework
 
                 if (null == result)
                 {
-                    return null;
+                    return None;
                 }
 
-                return new Venue(new Guid(result.VenueId), result.City, result.Address);
+                return Some(new VenueViewModel(new Guid(result.VenueId), result.City, result.Address));
             }
         }
     }

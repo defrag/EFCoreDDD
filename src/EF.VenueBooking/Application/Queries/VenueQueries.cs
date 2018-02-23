@@ -1,4 +1,5 @@
 ﻿using EF.VenueBooking.Application.ViewModels;
+using LanguageExt;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,6 +9,6 @@ namespace EF.VenueBooking.Application.Queries
 {
     public interface VenueQueries
     {
-        Task<Venue> Find(Guid id);
+        Task<Option<VenueViewModel>> Find(Guid id);
     }
 }

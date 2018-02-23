@@ -4,9 +4,9 @@ using System.Text;
 
 namespace EF.VenueBooking.Application.ViewModels
 {
-    public sealed class Venue
+    public sealed class VenueViewModel
     {
-        public Venue(Guid venueId, string city, string address)
+        public VenueViewModel(Guid venueId, string city, string address)
         {
             VenueId = venueId;
             City = city;

@@ -7,7 +7,7 @@ namespace EF.VenueBooking.Application.Commands
 {
     public sealed class CreateVenue : IRequest
     {
-        public CreateVenue(Guid venueId, string city, string address, int seats, IEnumerable<Tuple<string, string>> discountCoupons)
+        public CreateVenue(Guid venueId, string city, string address, int seats, IEnumerable<(string, string)> discountCoupons)
         {
             VenueId = venueId;
             City = city;
@@ -20,6 +20,6 @@ namespace EF.VenueBooking.Application.Commands
         public string City { get; }
         public string Address { get; }
         public int Seats { get; }
-        public IEnumerable<Tuple<string, string>> DiscountCoupons { get; }
+        public IEnumerable<(string, string)> DiscountCoupons { get; }
     }
 }

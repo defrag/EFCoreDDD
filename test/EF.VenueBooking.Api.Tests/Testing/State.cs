@@ -25,7 +25,7 @@ namespace EF.VenueBooking.Api.Tests.Testing
             int seats = 10
         )
         {
-            var coupons = new List<Tuple<string, string>>();
+            var coupons = new List<(string, string)>();
             await _mediator.Send(
                 new CreateVenue(
                     id, city, address, seats, coupons
