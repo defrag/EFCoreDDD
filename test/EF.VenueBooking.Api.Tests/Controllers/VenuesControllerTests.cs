@@ -32,6 +32,10 @@ namespace EF.VenueBooking.Api.Tests.Controllers
                 var content = new StringContent(payload, Encoding.UTF8, "text/json");
                 var response = await af.Client.PostAsync("api/venues", content);
                 response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+                var responseBody = await response.Content.ReadAsStringAsync();
+
+                responseBody.Should().MatchJson(@"{""venueId"":""@guid@"",""city"":""Cracov"",""address"":""Florianska 1""}");
             }
         }
 
