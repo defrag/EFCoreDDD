@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LanguageExt;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -17,14 +18,17 @@ namespace EF.VenueBooking.Domain
             return new Seat(venueId, seatNo);
         }
 
-        public void Reserve(string attendee)
+        public Either<SeatError, Unit> Reserve(string attendee)
         {
             if (IsReserved)
             {
-                throw new SeatPreviouslyReserved($"Seat was already reserved for {Attendee}.");
+                return new SeatPreviouslyReserved($"Seat was already reserved for {Attendee}.");
             }
             Attendee = attendee;
+
+            return new Unit();
         }
+
 
         public bool IsReserved => null != Attendee;
 
@@ -37,6 +41,20 @@ namespace EF.VenueBooking.Domain
         {
             VenueId = venueId;
             SeatNo = seatNo;
+        }
+
+        public class SeatError : NewType<SeatError, string>
+        {
+            public SeatError(string value) : base(value)
+            {
+            }
+        }
+
+        public class SeatPreviouslyReserved : SeatError
+        {
+            public SeatPreviouslyReserved(string value) : base(value)
+            {
+            }
         }
     }
 }

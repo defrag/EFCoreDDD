@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using LanguageExt;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static LanguageExt.Prelude;
 
 namespace EF.VenueBooking.Domain
 {
@@ -23,7 +25,7 @@ namespace EF.VenueBooking.Domain
 
         }
 
-        public Venue(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
+        private Venue(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
         {
             VenueId = venueId;
             Location = location ?? throw new ArgumentNullException(nameof(location));
@@ -32,36 +34,61 @@ namespace EF.VenueBooking.Domain
             DispatchedCoupons = new List<(string, DiscountCoupon)>();
         }
 
-        public static Venue WithNumberOfSeats(Guid venueId, Location location, int numberOfSeats)
+        private static Either<VenueError, Venue> Apply(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
         {
+            if (location == null)
+            {
+                return new VenueError("Venue needs to have a location.");
+            }
+
+            if (seats == null)
+            {
+                return new VenueError("Venue needs to have seats.");
+            }
+
+            return new Venue(venueId, location, seats, attendenceDiscountCoupons);
+        }
+
+        public static Either<VenueError, Venue> CreateVenueWithNumberOfSeats(Guid venueId, Location location, int numberOfSeats)
+        {
+            if (numberOfSeats < 1)
+            {
+                return new VenueError("Number of seats need to be greater than zero.");
+            }
+
             var seats = Enumerable
                 .Range(1, numberOfSeats)
                 .Select(id => Seat.Unreserved(venueId, id))
                 .ToList();
 
-            return new Venue(venueId, location, seats, new List<DiscountCoupon>());
+            return Apply(venueId, location, seats, new List<DiscountCoupon>());
         }
 
-        public static Venue WithNumberOfSeatsAndCoupons(Guid venueId, Location location, int numberOfSeats, List<DiscountCoupon> coupons)
+        public static Either<VenueError, Venue> CreateVenueWithNumberOfSeatsAndCoupons(Guid venueId, Location location, int numberOfSeats, List<DiscountCoupon> coupons)
         {
+            if (numberOfSeats < 1)
+            {
+                return new VenueError("Number of seats need to be greater than zero.");
+            }
+
             var seats = Enumerable
                 .Range(1, numberOfSeats)
                 .Select(id => Seat.Unreserved(venueId, id))
                 .ToList();
 
-            return new Venue(venueId, location, seats, coupons);
+            return Apply(venueId, location, seats, coupons);
         }
 
-        public void ReserveFor(string attendeeId)
+        public Either<VenueError, Venue> ReserveFor(string attendeeId)
         {
             if (AlreadyReservedFor(attendeeId))
             {
-                throw new SeatAlreadyReservedForAttendee($"Seat already reserved for {attendeeId}.");
+                return new SeatAlreadyReservedForAttendee($"Seat already reserved for {attendeeId}.");
             }
 
             if (false == FreeSeatsAvailable)
             {
-                throw new NoMoreSeatsAvailable("No more seats available for this venue.");
+                return new NoMoreSeatsAvailable("No more seats available for this venue.");
             }
 
             FreeSeats.First().Reserve(attendeeId);
@@ -72,6 +99,8 @@ namespace EF.VenueBooking.Domain
                 AvailableCoupons.RemoveAt(0);
                 DispatchedCoupons.Add((attendeeId, coupon));
             }
+
+            return this;
         }
 
         public bool HasCouponFor(string atteneeId) => DispatchedCoupons.Any(_ => _.Item1 == atteneeId);
@@ -96,6 +125,27 @@ namespace EF.VenueBooking.Domain
         {
             get { return JsonConvert.SerializeObject(DispatchedCoupons); }
             private set { DispatchedCoupons = JsonConvert.DeserializeObject<List<(string, DiscountCoupon)>>(value); }
+        }
+
+        public class VenueError : NewType<VenueError, string>
+        {
+            public VenueError(string value) : base(value)
+            {
+            }
+        }
+
+        public class SeatAlreadyReservedForAttendee : VenueError
+        {
+            public SeatAlreadyReservedForAttendee(string message) : base(message)
+            {
+            }
+        }
+
+        public class NoMoreSeatsAvailable : VenueError
+        {
+            public NoMoreSeatsAvailable(string message) : base(message)
+            {
+            }
         }
     }
 }

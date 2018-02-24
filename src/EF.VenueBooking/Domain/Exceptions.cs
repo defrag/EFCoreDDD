@@ -9,7 +9,7 @@ namespace EF.VenueBooking.Domain
         }
     }
 
-    public class SeatAlreadyReservedForAttendee : VenueBookingException
+    /*public class SeatAlreadyReservedForAttendee : VenueBookingException
     {
 
         public SeatAlreadyReservedForAttendee(string message) : base(message)
@@ -31,5 +31,5 @@ namespace EF.VenueBooking.Domain
         public SeatPreviouslyReserved(string message) : base(message)
         {
         }
-    }
+    }*/
 }

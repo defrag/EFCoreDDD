@@ -23,14 +23,14 @@ namespace EF.VenueBooking.IntegrationTests
             var repo = new EntityFrameworkVenueRepository(_context);
 
             var id = Guid.NewGuid();
-            var venue = Venue.WithNumberOfSeatsAndCoupons(
+            var venue = Venue.CreateVenueWithNumberOfSeatsAndCoupons(
                 id,
                 new Location("Cracov", "Florianska 1"),
                 10,
                 new List<DiscountCoupon>() { new DiscountCoupon("CODE0001", "IntelliJ"), new DiscountCoupon("CODE0002", "IntelliJ") }
             );
 
-            await repo.Add(venue);
+            venue.Map(async v => await repo.Add(v));
 
             var connString = _context.Database.GetDbConnection().ConnectionString;
 

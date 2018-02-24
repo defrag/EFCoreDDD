@@ -19,14 +19,14 @@ namespace EF.VenueBooking.Application.Commands
 
         public async Task Handle(CreateVenue command)
         {
-            var venue = Venue.WithNumberOfSeatsAndCoupons(
+            var venue = Venue.CreateVenueWithNumberOfSeatsAndCoupons(
                 command.VenueId,
                 new Location(command.City, command.Address),
                 command.Seats,
                 command.DiscountCoupons.Select(_ => new DiscountCoupon(_.Item1, _.Item2)).ToList()
             );
 
-            await _repo.Add(venue);
+            venue.Map(async v => await _repo.Add(v));
         }
     }
 }
