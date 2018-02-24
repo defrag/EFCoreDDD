@@ -26,7 +26,7 @@ namespace EF.VenueBooking.Application.Commands
                 command.DiscountCoupons.Select(_ => new DiscountCoupon(_.Item1, _.Item2)).ToList()
             );
 
-            venue.Map(async v => await _repo.Add(v));
+            await venue.MapAsync(v => _repo.Add(v));
         }
     }
 }

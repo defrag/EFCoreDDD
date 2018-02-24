@@ -38,6 +38,7 @@ namespace EF.VenueBooking.Tests.Domain
         public void it_is_created_with_valid_location_and_number_of_seats()
         {
             var venue = CreateVenueWithNumberOfSeats(Guid.NewGuid(), new Location("Cracov", "Florianska 1"), 10);
+            venue.IsRight.Should().BeTrue();
         }
 
         [Fact]

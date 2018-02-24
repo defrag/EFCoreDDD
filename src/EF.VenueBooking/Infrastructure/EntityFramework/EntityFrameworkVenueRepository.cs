@@ -1,10 +1,9 @@
 ﻿using EF.VenueBooking.Domain;
+using LanguageExt;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using static LanguageExt.Prelude;
 
 namespace EF.VenueBooking.Infrastructure.EntityFramework
 {
@@ -17,10 +16,12 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework
             _context = context;
         }
 
-        public async Task Add(Venue venue)
+        public async Task<Unit> Add(Venue venue)
         {
             await _context.AddAsync(venue);
             await _context.SaveChangesAsync();
+
+            return unit;
         }
 
         public async Task<Venue> Get(Guid venueId)
