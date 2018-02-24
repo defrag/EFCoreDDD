@@ -28,41 +28,14 @@ namespace EF.VenueBooking.Domain
         private Venue(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
         {
             VenueId = venueId;
-            Location = location ?? throw new ArgumentNullException(nameof(location));
-            Seats = seats ?? throw new ArgumentNullException(nameof(seats));
-            AvailableCoupons = attendenceDiscountCoupons ?? new List<DiscountCoupon>();
+            Location = location;
+            Seats = seats;
+            AvailableCoupons = attendenceDiscountCoupons;
             DispatchedCoupons = new List<(string, DiscountCoupon)>();
         }
 
-        private static Either<VenueError, Venue> Apply(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
-        {
-            if (location == null)
-            {
-                return new VenueError("Venue needs to have a location.");
-            }
-
-            if (seats == null)
-            {
-                return new VenueError("Venue needs to have seats.");
-            }
-
-            return new Venue(venueId, location, seats, attendenceDiscountCoupons);
-        }
-
         public static Either<VenueError, Venue> CreateVenueWithNumberOfSeats(Guid venueId, Location location, int numberOfSeats)
-        {
-            if (numberOfSeats < 1)
-            {
-                return new VenueError("Number of seats need to be greater than zero.");
-            }
-
-            var seats = Enumerable
-                .Range(1, numberOfSeats)
-                .Select(id => Seat.Unreserved(venueId, id))
-                .ToList();
-
-            return Apply(venueId, location, seats, new List<DiscountCoupon>());
-        }
+            => CreateVenueWithNumberOfSeatsAndCoupons(venueId, location, numberOfSeats, new List<DiscountCoupon>());
 
         public static Either<VenueError, Venue> CreateVenueWithNumberOfSeatsAndCoupons(Guid venueId, Location location, int numberOfSeats, List<DiscountCoupon> coupons)
         {
@@ -114,6 +87,26 @@ namespace EF.VenueBooking.Domain
         private bool FreeSeatsAvailable => FreeSeats.Count > 0;
 
         private bool HasAvailableCoupons => AvailableCoupons.Count > 0;
+
+        private static Either<VenueError, Venue> Apply(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
+        {
+            if (location == null)
+            {
+                return new VenueError("Venue needs to have a location.");
+            }
+
+            if (seats == null)
+            {
+                return new VenueError("Venue needs to have seats.");
+            }
+
+            if (attendenceDiscountCoupons == null)
+            {
+                return new VenueError("Venue attendence discount coupons cannot be null.");
+            }
+
+            return new Venue(venueId, location, seats, attendenceDiscountCoupons);
+        }
 
         internal string AvailableCouponsSerialized
         {
