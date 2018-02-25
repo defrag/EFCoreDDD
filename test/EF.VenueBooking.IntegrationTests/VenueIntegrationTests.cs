@@ -30,7 +30,9 @@ namespace EF.VenueBooking.IntegrationTests
                 new List<DiscountCoupon>() { new DiscountCoupon("CODE0001", "IntelliJ"), new DiscountCoupon("CODE0002", "IntelliJ") }
             );
 
-            venue.Map(async v => await repo.Add(v));
+            await venue
+                .MapAsync(v => repo.Add(v))
+                .MapAsync(_ => repo.Commit());
 
             var connString = _context.Database.GetDbConnection().ConnectionString;
 

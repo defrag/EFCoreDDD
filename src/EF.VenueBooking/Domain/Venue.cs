@@ -14,7 +14,7 @@ namespace EF.VenueBooking.Domain
 
         public Location Location { get; private set; }
 
-        private List<Seat> Seats { get; set; }
+        public List<Seat> Seats { get; private set; }
 
         private List<DiscountCoupon> AvailableCoupons { get; set; }
 

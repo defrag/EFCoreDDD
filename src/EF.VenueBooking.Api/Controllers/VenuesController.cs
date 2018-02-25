@@ -46,6 +46,13 @@ namespace EF.VenueBooking.Api.Controllers
                    None: NotFound
                );
 
+        // POST api/venues/{id}/register
+        [HttpPost("{id}/register")]
+        public Task<IActionResult> Register(Guid id, [FromBody]RegisterAttendeeToVenueRendition rendition)
+          => from cmd in CreateRegisterCommand(rendition, id).AsTask()
+             from _ in RegisterToVenue(cmd)
+             select NoContent() as IActionResult;
+
         private async Task<LanguageExt.Unit> CreateVenue(CreateVenue command)
         {
             await _mediator.Send(command);
@@ -65,5 +72,15 @@ namespace EF.VenueBooking.Api.Controllers
                 rendition.Seats,
                 rendition.DiscountCoupons.Select(_ => (_.CouponCode, _.ProductName))
             );
+
+        private RegisterAttendeeToVenue CreateRegisterCommand(RegisterAttendeeToVenueRendition rendition, Guid venueId)
+            => new RegisterAttendeeToVenue(venueId, rendition.AttendeeId);
+
+        private async Task<LanguageExt.Unit> RegisterToVenue(RegisterAttendeeToVenue command)
+        {
+            await _mediator.Send(command);
+
+            return new LanguageExt.Unit();
+        }
     }
 }

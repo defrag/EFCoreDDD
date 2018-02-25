@@ -29,8 +29,7 @@ namespace EF.VenueBooking.Api.Tests.Controllers
                       ]
                     }
                 ";
-                var content = new StringContent(payload, Encoding.UTF8, "text/json");
-                var response = await af.Client.PostAsync("api/venues", content);
+                var response = await af.PostJson("api/venues", payload);
                 response.StatusCode.Should().Be(HttpStatusCode.Created);
 
                 var responseBody = await response.Content.ReadAsStringAsync();
@@ -62,6 +61,24 @@ namespace EF.VenueBooking.Api.Tests.Controllers
 
                 var responseBody = await response.Content.ReadAsStringAsync();
                 responseBody.Should().MatchJson(@"{""venueId"":""@guid@"",""city"":""Warsaw"",""address"":""St 1""}");
+            }
+        }
+
+        [Fact]
+        public async Task it_responds_with_204_when_registering_succesfully_to_venue()
+        {
+            using (var af = new ApiFixture())
+            {
+                var id = Guid.NewGuid();
+                await af.State.CreateVenue(id, "Warsaw", "St 1");
+
+                var payload = @"
+                    {
+                      ""AttendeeId"": ""michi""
+                    }
+                ";
+                var response = await af.PostJson($"api/venues/{id}/register", payload);
+                response.StatusCode.Should().Be(HttpStatusCode.NoContent);
             }
         }
     }

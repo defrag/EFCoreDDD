@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EF.VenueBooking.Api.Tests.Testing
 {
@@ -49,5 +50,11 @@ namespace EF.VenueBooking.Api.Tests.Testing
 
         public T GetService<T>()
             => Server.Host.Services.GetRequiredService<T>();
+
+        public async Task<HttpResponseMessage> PostJson(string url, string payload)
+        {
+            var content = new StringContent(payload, Encoding.UTF8, "text/json");
+            return await Client.PostAsync(url, content);
+        }
     }
 }

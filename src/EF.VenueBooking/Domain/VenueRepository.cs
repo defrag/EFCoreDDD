@@ -10,6 +10,8 @@ namespace EF.VenueBooking.Domain
     {
         Task<Unit> Add(Venue venue);
 
-        Task<Venue> Get(Guid venueId);
+        Task<Option<Venue>> Get(Guid venueId);
+
+        Task<Unit> Commit();
     }
 }

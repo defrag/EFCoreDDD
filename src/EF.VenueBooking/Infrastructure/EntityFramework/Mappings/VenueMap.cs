@@ -17,6 +17,7 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework.Mappings
 
             builder.OwnsOne(_ => _.Location).Property(l => l.City).HasColumnName("City").IsRequired();
             builder.OwnsOne(_ => _.Location).Property(l => l.Address).HasColumnName("Address").IsRequired();
+            builder.HasMany(_ => _.Seats).WithOne().OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

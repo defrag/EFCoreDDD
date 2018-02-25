@@ -19,14 +19,26 @@ namespace EF.VenueBooking.Infrastructure.EntityFramework
         public async Task<Unit> Add(Venue venue)
         {
             await _context.AddAsync(venue);
+
+            return unit;
+        }
+
+        public async Task<Option<Venue>> Get(Guid venueId)
+        {
+            var result = await _context
+                .Venues
+                .Include(_ => _.Seats)
+                .SingleOrDefaultAsync(_ => _.VenueId == venueId);
+
+            return result != null ? Some(result) : None;
+        }
+
+        public async Task<Unit> Commit()
+        {
             await _context.SaveChangesAsync();
 
             return unit;
         }
 
-        public async Task<Venue> Get(Guid venueId)
-        {
-            return await _context.Venues.SingleOrDefaultAsync(_ => _.VenueId == venueId);
-        }
     }
 }
