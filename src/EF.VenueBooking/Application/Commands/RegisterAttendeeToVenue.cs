@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using EF.VenueBooking.Domain;
+using LanguageExt;
+using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace EF.VenueBooking.Application.Commands
 {
-    public sealed class RegisterAttendeeToVenue : IRequest
+    public sealed class RegisterAttendeeToVenue : IRequest<Either<VenueError, LanguageExt.Unit>>
     {
         public RegisterAttendeeToVenue(Guid venueId, string attendeeId)
         {

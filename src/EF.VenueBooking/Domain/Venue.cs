@@ -119,26 +119,5 @@ namespace EF.VenueBooking.Domain
             get { return JsonConvert.SerializeObject(DispatchedCoupons); }
             private set { DispatchedCoupons = JsonConvert.DeserializeObject<List<(string, DiscountCoupon)>>(value); }
         }
-
-        public class VenueError : NewType<VenueError, string>
-        {
-            public VenueError(string value) : base(value)
-            {
-            }
-        }
-
-        public class SeatAlreadyReservedForAttendee : VenueError
-        {
-            public SeatAlreadyReservedForAttendee(string message) : base(message)
-            {
-            }
-        }
-
-        public class NoMoreSeatsAvailable : VenueError
-        {
-            public NoMoreSeatsAvailable(string message) : base(message)
-            {
-            }
-        }
     }
 }

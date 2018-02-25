@@ -9,6 +9,8 @@ using MediatR;
 using EF.VenueBooking.Application.Queries;
 using LanguageExt;
 using EF.VenueBooking.Application.ViewModels;
+using static EF.VenueBooking.Domain.Venue;
+using static EF.VenueBooking.Api.Http.ResponseGenerator;
 
 namespace EF.VenueBooking.Api.Controllers
 {
@@ -28,10 +30,10 @@ namespace EF.VenueBooking.Api.Controllers
 
 
         [HttpGet("{id}", Name = "GetVenue")]
-        public async Task<IActionResult> GetById(Guid id) 
+        public async Task<IActionResult> GetById(Guid id)
             => (await _queries.Find(id))
                 .Match<IActionResult>(
-                    Some: Ok, 
+                    Some: Ok,
                     None: NotFound
                 );
 
@@ -50,8 +52,11 @@ namespace EF.VenueBooking.Api.Controllers
         [HttpPost("{id}/register")]
         public Task<IActionResult> Register(Guid id, [FromBody]RegisterAttendeeToVenueRendition rendition)
           => from cmd in CreateRegisterCommand(rendition, id).AsTask()
-             from _ in RegisterToVenue(cmd)
-             select NoContent() as IActionResult;
+             from result in RegisterToVenue(cmd)
+             select result.Match<IActionResult>(
+                   Right: (_) => NoContent(),
+                   Left: (e) => ErrorOccured(e.Value)
+             );
 
         private async Task<LanguageExt.Unit> CreateVenue(CreateVenue command)
         {
@@ -76,11 +81,9 @@ namespace EF.VenueBooking.Api.Controllers
         private RegisterAttendeeToVenue CreateRegisterCommand(RegisterAttendeeToVenueRendition rendition, Guid venueId)
             => new RegisterAttendeeToVenue(venueId, rendition.AttendeeId);
 
-        private async Task<LanguageExt.Unit> RegisterToVenue(RegisterAttendeeToVenue command)
+        private async Task<Either<VenueError, LanguageExt.Unit>> RegisterToVenue(RegisterAttendeeToVenue command)
         {
-            await _mediator.Send(command);
-
-            return new LanguageExt.Unit();
+            return await _mediator.Send(command);
         }
     }
 }

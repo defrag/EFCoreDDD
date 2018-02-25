@@ -81,5 +81,49 @@ namespace EF.VenueBooking.Api.Tests.Controllers
                 response.StatusCode.Should().Be(HttpStatusCode.NoContent);
             }
         }
+
+        [Fact]
+        public async Task it_responds_with_400_when_registering_to_venue_that_doesnt_exist()
+        {
+            using (var af = new ApiFixture())
+            {
+                var id = Guid.NewGuid();
+   
+                var response = await af.PostJson($"api/venues/{id}/register", @"
+                    {
+                      ""AttendeeId"": ""fuubar""
+                    }
+                ");
+                response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+                var responseBody = await response.Content.ReadAsStringAsync();
+                responseBody.Should().MatchJson(@"{""errorMessage"":""Venue not found.""}");
+            }
+        }
+
+        [Fact]
+        public async Task it_responds_with_400_when_registering_to_fully_booked_venue()
+        {
+            using (var af = new ApiFixture())
+            {
+                var id = Guid.NewGuid();
+                await af.State.CreateVenue(id, "Warsaw", "St 1", 1);
+
+                await af.PostJson($"api/venues/{id}/register", @"
+                    {
+                      ""AttendeeId"": ""michi""
+                    }
+                ");
+
+
+                var response =  await af.PostJson($"api/venues/{id}/register", @"
+                    {
+                      ""AttendeeId"": ""fuubar""
+                    }
+                ");
+                response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+                var responseBody = await response.Content.ReadAsStringAsync();
+                responseBody.Should().MatchJson(@"{""errorMessage"":""No more seats available for this venue.""}");
+            }
+        }
     }
 }

@@ -1,11 +1,11 @@
 ﻿using EF.VenueBooking.Domain;
+using LanguageExt;
 using MediatR;
 using System.Threading.Tasks;
-using static EF.VenueBooking.Domain.Venue;
 
 namespace EF.VenueBooking.Application.Commands
 {
-    public sealed class RegisterAttendeeToVenueHandler : IAsyncRequestHandler<RegisterAttendeeToVenue>
+    public sealed class RegisterAttendeeToVenueHandler : IAsyncRequestHandler<RegisterAttendeeToVenue, Either<VenueError, LanguageExt.Unit>>
     {
         private readonly VenueRepository _repo;
 
@@ -14,13 +14,15 @@ namespace EF.VenueBooking.Application.Commands
             _repo = repo;
         }
 
-        public async Task Handle(RegisterAttendeeToVenue message)
+
+        public async Task<Either<VenueError, LanguageExt.Unit>> Handle(RegisterAttendeeToVenue message)
         {
-           var venue = await _repo.Get(message.VenueId);
-           await venue
-                .ToEither(new VenueError("Venue not found."))
-                .Bind(_ => _.ReserveFor(message.AttendeeId))
-                .MapAsync(_ => _repo.Commit());
+            var venue = await _repo.Get(message.VenueId);
+
+            return await venue
+                 .ToEither(new VenueError("Venue not found."))
+                 .Bind(_ => _.ReserveFor(message.AttendeeId))
+                 .MapAsync(_ => _repo.Commit());
             ;
         }
     }
