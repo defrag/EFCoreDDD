@@ -34,17 +34,7 @@ namespace EF.VenueBooking.Domain
         }
     }
 
-    public class SeatError 
-    {
-        public SeatError(string value)
-        {
-            Value = value;
-        }
-
-        public string Value { get; }
-    }
-
-    public class SeatPreviouslyReserved : SeatError
+    public class SeatPreviouslyReserved : VenueError
     {
         public SeatPreviouslyReserved(string value) : base(value)
         {

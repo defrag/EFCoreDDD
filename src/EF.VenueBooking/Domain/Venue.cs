@@ -64,16 +64,12 @@ namespace EF.VenueBooking.Domain
                 return new NoMoreSeatsAvailable("No more seats available for this venue.");
             }
 
-            FreeSeats.First().Reserve(attendeeId);
+            var seat = FreeSeats.First();
 
-            if (HasAvailableCoupons)
-            {
-                var coupon = AvailableCoupons[0];
-                AvailableCoupons.RemoveAt(0);
-                DispatchedCoupons.Add((attendeeId, coupon));
-            }
-
-            return this;
+            return seat
+                .Reserve(attendeeId)
+                .Map(_ => DispatchCouponIfAvailable(attendeeId))
+                .Map(_ => this);
         }
 
         public bool HasCouponFor(string atteneeId) => DispatchedCoupons.Any(_ => _.Item1 == atteneeId);
@@ -87,6 +83,18 @@ namespace EF.VenueBooking.Domain
         private bool FreeSeatsAvailable => FreeSeats.Count > 0;
 
         private bool HasAvailableCoupons => AvailableCoupons.Count > 0;
+
+        private Unit DispatchCouponIfAvailable(string attendeeId)
+        {
+            if (HasAvailableCoupons)
+            {
+                var coupon = AvailableCoupons[0];
+                AvailableCoupons.RemoveAt(0);
+                DispatchedCoupons.Add((attendeeId, coupon));
+            }
+
+            return unit;
+        }
 
         private static Either<VenueError, Venue> Apply(Guid venueId, Location location, List<Seat> seats, List<DiscountCoupon> attendenceDiscountCoupons)
         {

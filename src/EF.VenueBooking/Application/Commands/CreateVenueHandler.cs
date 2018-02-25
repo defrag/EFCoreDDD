@@ -1,4 +1,5 @@
-﻿using EF.VenueBooking.Domain;
+﻿using static EF.VenueBooking.Domain.Venue;
+using EF.VenueBooking.Domain;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace EF.VenueBooking.Application.Commands
 
         public async Task Handle(CreateVenue command)
         {
-            var venue = Venue.CreateVenueWithNumberOfSeatsAndCoupons(
+            var venue = CreateVenueWithNumberOfSeatsAndCoupons(
                 command.VenueId,
                 new Location(command.City, command.Address),
                 command.Seats,

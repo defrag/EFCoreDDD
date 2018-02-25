@@ -18,7 +18,7 @@ namespace EF.VenueBooking.Domain
             return new Seat(venueId, seatNo);
         }
 
-        public Either<SeatError, Unit> Reserve(string attendee)
+        public Either<VenueError, Unit> Reserve(string attendee)
         {
             if (IsReserved)
             {
