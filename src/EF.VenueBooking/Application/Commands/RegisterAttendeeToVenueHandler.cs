@@ -14,16 +14,10 @@ namespace EF.VenueBooking.Application.Commands
             _repo = repo;
         }
 
-
-        public async Task<Either<VenueError, LanguageExt.Unit>> Handle(RegisterAttendeeToVenue message)
-        {
-            var venue = await _repo.Get(message.VenueId);
-
-            return await venue
-                 .ToEither(new VenueError("Venue not found."))
-                 .Bind(_ => _.ReserveFor(message.AttendeeId))
-                 .MapAsync(_ => _repo.Commit());
-            ;
-        }
+        public Task<Either<VenueError, LanguageExt.Unit>> Handle(RegisterAttendeeToVenue message)
+            => _repo.Get(message.VenueId)
+                .ToEitherAsync(new VenueNotFound("Venue not found.") as VenueError)
+                .BindAsync(_ => _.ReserveFor(message.AttendeeId))
+                .MapAsync(_ => _repo.Commit());
     }
 }

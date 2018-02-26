@@ -9,7 +9,6 @@ using MediatR;
 using EF.VenueBooking.Application.Queries;
 using LanguageExt;
 using EF.VenueBooking.Application.ViewModels;
-using static EF.VenueBooking.Domain.Venue;
 using static EF.VenueBooking.Api.Http.ResponseGenerator;
 
 namespace EF.VenueBooking.Api.Controllers
@@ -28,11 +27,10 @@ namespace EF.VenueBooking.Api.Controllers
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
-
         [HttpGet("{id}", Name = "GetVenue")]
-        public async Task<IActionResult> GetById(Guid id)
-            => (await _queries.Find(id))
-                .Match<IActionResult>(
+        public Task<IActionResult> GetById(Guid id)
+            => from result in QueryVenue(id)
+               select result.Match<IActionResult>(
                     Some: Ok,
                     None: NotFound
                 );
@@ -53,21 +51,13 @@ namespace EF.VenueBooking.Api.Controllers
         public Task<IActionResult> Register(Guid id, [FromBody]RegisterAttendeeToVenueRendition rendition)
           => from cmd in CreateRegisterCommand(rendition, id).AsTask()
              from result in RegisterToVenue(cmd)
-             select result.Match<IActionResult>(
+             select result.Match(
                    Right: (_) => NoContent(),
-                   Left: (e) => ErrorOccured(e.Value)
+                   Left: HandleError
              );
-
-        private async Task<LanguageExt.Unit> CreateVenue(CreateVenue command)
-        {
-            await _mediator.Send(command);
-
-            return new LanguageExt.Unit();
-        }
 
         private Task<Option<VenueViewModel>> QueryVenue(Guid venueId) 
             => _queries.Find(venueId);
-        
 
         private CreateVenue CreateVenueCommand(CreateVenueRendition rendition) =>
             new CreateVenue(
@@ -81,9 +71,25 @@ namespace EF.VenueBooking.Api.Controllers
         private RegisterAttendeeToVenue CreateRegisterCommand(RegisterAttendeeToVenueRendition rendition, Guid venueId)
             => new RegisterAttendeeToVenue(venueId, rendition.AttendeeId);
 
-        private async Task<Either<VenueError, LanguageExt.Unit>> RegisterToVenue(RegisterAttendeeToVenue command)
+        private Task<Either<VenueError, LanguageExt.Unit>> RegisterToVenue(RegisterAttendeeToVenue command)
+            => _mediator.Send(command);
+
+        private async Task<LanguageExt.Unit> CreateVenue(CreateVenue command)
         {
-            return await _mediator.Send(command);
+            await _mediator.Send(command);
+
+            return new LanguageExt.Unit();
+        }
+
+        private IActionResult HandleError(VenueError e)
+        {
+            switch (e)
+            {
+                case VenueNotFound err:
+                    return ResourceNotFound(err.Value);
+                default:
+                    return ErrorOccured(e.Value);
+            }
         }
     }
 }

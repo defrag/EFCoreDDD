@@ -83,7 +83,7 @@ namespace EF.VenueBooking.Api.Tests.Controllers
         }
 
         [Fact]
-        public async Task it_responds_with_400_when_registering_to_venue_that_doesnt_exist()
+        public async Task it_responds_with_404_when_registering_to_venue_that_doesnt_exist()
         {
             using (var af = new ApiFixture())
             {
@@ -94,7 +94,7 @@ namespace EF.VenueBooking.Api.Tests.Controllers
                       ""AttendeeId"": ""fuubar""
                     }
                 ");
-                response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+                response.StatusCode.Should().Be(HttpStatusCode.NotFound);
                 var responseBody = await response.Content.ReadAsStringAsync();
                 responseBody.Should().MatchJson(@"{""errorMessage"":""Venue not found.""}");
             }

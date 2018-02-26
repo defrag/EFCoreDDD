@@ -98,6 +98,7 @@ namespace EF.VenueBooking.Tests.Domain
                 10,
                 new List<DiscountCoupon>() { new DiscountCoupon("CODE1", "Visual Studio Enterprice") }
             );
+
             venue
                 .Bind(_ => _.ReserveFor("neo"))
                 .Bind(_ => _.ReserveFor("michi"))
