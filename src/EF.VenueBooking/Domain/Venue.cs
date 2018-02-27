@@ -47,9 +47,11 @@ namespace EF.VenueBooking.Domain
             var seats = Enumerable
                 .Range(1, numberOfSeats)
                 .Select(id => Seat.Unreserved(venueId, id))
-                .ToList();
+                .Sequence();
 
-            return Apply(venueId, location, seats, coupons);
+            return from s in seats
+                   from venue in Apply(venueId, location, s.ToList(), coupons)
+                   select venue;
         }
 
         public Either<VenueError, Venue> ReserveFor(string attendeeId)

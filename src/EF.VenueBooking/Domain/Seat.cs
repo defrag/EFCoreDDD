@@ -13,12 +13,16 @@ namespace EF.VenueBooking.Domain
 
         public string Attendee { get; private set; }
 
-        public static Seat Unreserved(Guid venueId, int seatNo)
+        public static Either<VenueError, Seat> Unreserved(Guid venueId, int seatNo)
         {
+            if (seatNo < 1)
+            {
+                return new VenueError("Seat number must be greater than zero.");
+            }
             return new Seat(venueId, seatNo);
         }
 
-        public Either<VenueError, Unit> Reserve(string attendee)
+        public Either<VenueError, Seat> Reserve(string attendee)
         {
             if (IsReserved)
             {
@@ -26,7 +30,7 @@ namespace EF.VenueBooking.Domain
             }
             Attendee = attendee;
 
-            return new Unit();
+            return this;
         }
 
 
