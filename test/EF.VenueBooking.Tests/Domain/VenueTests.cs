@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.Text;
 using Xunit;
 using static EF.VenueBooking.Domain.Venue;
+using static EF.VenueBooking.Domain.DiscountCoupon;
+using LanguageExt;
+using System.Linq;
 
 namespace EF.VenueBooking.Tests.Domain
 {
@@ -74,13 +77,17 @@ namespace EF.VenueBooking.Tests.Domain
         [Fact]
         public void it_registers_coupons_for_first_attendees_if_coupons_are_provided()
         {
-            var venue = CreateVenueWithNumberOfSeatsAndCoupons(
-                Guid.NewGuid(), 
-                new Location("Cracov", "Florianska 1"), 
-                10,
-                new List<DiscountCoupon>() { new DiscountCoupon("CODE1", "Visual Studio Enterprice") }
-            );
-            venue
+            var coupons = new[] { CreateDiscountCoupon("CODE1", "Visual Studio Enterprice") };
+            var venue = coupons
+                .Sequence()
+                .Bind(c =>
+                    CreateVenueWithNumberOfSeatsAndCoupons(
+                        Guid.NewGuid(),
+                        new Location("Cracov", "Florianska 1"),
+                        10,
+                        c.ToList()
+                    )
+                )
                 .Bind(_ => _.ReserveFor("neo"))
                 .Map(_ => _.HasCouponFor("neo"))
                 .Match(
@@ -92,14 +99,17 @@ namespace EF.VenueBooking.Tests.Domain
         [Fact]
         public void it_doesnt_dispatch_any_more_coupons_if_all_were_dispatched()
         {
-            var venue = CreateVenueWithNumberOfSeatsAndCoupons(
-                Guid.NewGuid(),
-                new Location("Cracov", "Florianska 1"),
-                10,
-                new List<DiscountCoupon>() { new DiscountCoupon("CODE1", "Visual Studio Enterprice") }
-            );
-
-            venue
+            var coupons = new[] { CreateDiscountCoupon("CODE1", "Visual Studio Enterprice") };
+            var venue = coupons
+                .Sequence()
+                .Bind(c => 
+                    CreateVenueWithNumberOfSeatsAndCoupons(
+                        Guid.NewGuid(),
+                        new Location("Cracov", "Florianska 1"),
+                        10,
+                        c.ToList()
+                    )
+                )
                 .Bind(_ => _.ReserveFor("neo"))
                 .Bind(_ => _.ReserveFor("michi"))
                 .Map(_ => _.HasCouponFor("michi"))

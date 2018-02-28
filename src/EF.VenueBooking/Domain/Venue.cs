@@ -46,7 +46,7 @@ namespace EF.VenueBooking.Domain
 
             var seats = Enumerable
                 .Range(1, numberOfSeats)
-                .Select(id => Seat.Unreserved(venueId, id))
+                .Select(id => Seat.CreateFreeSeat(venueId, id))
                 .Sequence();
 
             return from s in seats

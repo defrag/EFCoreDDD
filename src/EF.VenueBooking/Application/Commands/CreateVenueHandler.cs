@@ -1,4 +1,5 @@
 ﻿using static EF.VenueBooking.Domain.Venue;
+using static EF.VenueBooking.Domain.DiscountCoupon;
 using EF.VenueBooking.Domain;
 using MediatR;
 using System.Linq;
@@ -17,12 +18,13 @@ namespace EF.VenueBooking.Application.Commands
         }
 
         public Task Handle(CreateVenue command)
-            => CreateVenueWithNumberOfSeatsAndCoupons(
+            => command.DiscountCoupons.Select(_ => CreateDiscountCoupon(_.Item1, _.Item2)).Sequence()
+               .Bind(coupons => CreateVenueWithNumberOfSeatsAndCoupons(
                     command.VenueId,
                     new Location(command.City, command.Address),
                     command.Seats,
-                    command.DiscountCoupons.Select(_ => new DiscountCoupon(_.Item1, _.Item2)).ToList()
-                )
+                    coupons.ToList()
+                ))
                 .MapAsync(Save);
         
         private Task<LanguageExt.Unit> Save(Venue v)

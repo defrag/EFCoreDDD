@@ -13,7 +13,7 @@ namespace EF.VenueBooking.Domain
 
         public string Attendee { get; private set; }
 
-        public static Either<VenueError, Seat> Unreserved(Guid venueId, int seatNo)
+        public static Either<VenueError, Seat> CreateFreeSeat(Guid venueId, int seatNo)
         {
             if (seatNo < 1)
             {

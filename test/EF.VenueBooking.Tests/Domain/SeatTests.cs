@@ -13,7 +13,7 @@ namespace EF.VenueBooking.Tests.Domain
         [Fact]
         public void it_can_be_created_unreserved()
         {
-            var seat = Seat.Unreserved(Guid.NewGuid(), 1);
+            var seat = CreateFreeSeat(Guid.NewGuid(), 1);
             seat
                 .Map(_ => _.IsReserved)
                 .Match(
@@ -25,7 +25,7 @@ namespace EF.VenueBooking.Tests.Domain
         [Fact]
         public void it_can_be_reserved_for_attendee()
         {
-            var seat = Seat.Unreserved(Guid.NewGuid(), 1);
+            var seat = CreateFreeSeat(Guid.NewGuid(), 1);
             seat
                 .Bind(_ => _.Reserve("fuubar"))
                 .Map(_ => _.IsReserved)
@@ -39,7 +39,7 @@ namespace EF.VenueBooking.Tests.Domain
         [Fact]
         public void it_cannot_be_reserved_twice_of_course()
         {
-            var seat = Seat.Unreserved(Guid.NewGuid(), 1);
+            var seat = CreateFreeSeat(Guid.NewGuid(), 1);
             seat
                 .Bind(_ => _.Reserve("fuubar"))
                 .Bind(_ => _.Reserve("michi"))

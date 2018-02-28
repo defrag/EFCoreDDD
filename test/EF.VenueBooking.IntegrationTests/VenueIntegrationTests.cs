@@ -1,4 +1,6 @@
 ﻿using EF.VenueBooking.Domain;
+using static EF.VenueBooking.Domain.DiscountCoupon;
+using static EF.VenueBooking.Domain.Venue;
 using EF.VenueBooking.Infrastructure.EntityFramework;
 using EF.VenueBooking.IntegrationTests.Testing;
 using System;
@@ -11,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Data.SqlClient;
 using Dapper;
 using FluentAssertions;
+using LanguageExt;
 
 namespace EF.VenueBooking.IntegrationTests
 {
@@ -23,14 +26,18 @@ namespace EF.VenueBooking.IntegrationTests
             var repo = new EntityFrameworkVenueRepository(_context);
 
             var id = Guid.NewGuid();
-            var venue = Venue.CreateVenueWithNumberOfSeatsAndCoupons(
-                id,
-                new Location("Cracov", "Florianska 1"),
-                10,
-                new List<DiscountCoupon>() { new DiscountCoupon("CODE0001", "IntelliJ"), new DiscountCoupon("CODE0002", "IntelliJ") }
-            );
+            var coupons = new[] { CreateDiscountCoupon("CODE0001", "IntelliJ"), CreateDiscountCoupon("CODE0002", "IntelliJ") };
 
-            await venue
+            await coupons
+                .Sequence()
+                .Bind(c =>
+                    CreateVenueWithNumberOfSeatsAndCoupons(
+                        id,
+                        new Location("Cracov", "Florianska 1"),
+                        10,
+                        c.ToList()
+                    )
+                )
                 .MapAsync(v => repo.Add(v))
                 .MapAsync(_ => repo.Commit());
 
