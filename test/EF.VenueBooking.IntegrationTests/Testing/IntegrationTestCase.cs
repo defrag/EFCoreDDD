@@ -19,9 +19,9 @@ namespace EF.VenueBooking.IntegrationTests.Testing
                .BuildServiceProvider();
             var builder = new DbContextOptionsBuilder<VenueBookingContext>();
             builder
-                .UseSqlServer($"Data Source=.\\SQLEXPRESS;Initial Catalog=VenueBooking_Test;Integrated Security=True", b => b.MigrationsAssembly("EF.VenueBooking.Database"))
-                .UseInternalServiceProvider(serviceProvider)
-                ;
+                .UseInMemoryDatabase("testdb")
+                .UseInternalServiceProvider(serviceProvider);
+                
             _context = new VenueBookingContext(builder.Options);
             _context.Database.EnsureDeleted();
             _context.Database.Migrate();
